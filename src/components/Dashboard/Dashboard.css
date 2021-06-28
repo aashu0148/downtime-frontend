@@ -1,0 +1,28 @@
+.dashboard {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.dashboard .wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background: var(--primary-color);
+  background: -webkit-linear-gradient(
+    top,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  background: -moz-linear-gradient(
+    top,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  background: linear-gradient(
+    to bottom,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+}

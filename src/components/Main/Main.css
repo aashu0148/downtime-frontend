@@ -1,0 +1,149 @@
+.main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: var(--primary-color);
+  background: -webkit-linear-gradient(
+    top,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  background: -moz-linear-gradient(
+    top,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  background: linear-gradient(
+    to bottom,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  z-index: -2;
+}
+
+.main {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.main_wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.main_heading {
+  width: 90%;
+  margin: auto;
+  text-align: center;
+  font-size: var(--font-gaint);
+  margin: 25px auto;
+}
+
+.main_heading span {
+  background: -webkit-linear-gradient(35deg, #fff, #ccc, #fff);
+  background-clip: content-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.main form {
+  background: #fff;
+  display: flex;
+  width: 60%;
+  margin: 10px auto;
+  border-radius: 25px;
+  box-shadow: -2px 4px 10px rgb(0 0 0 / 15%);
+  overflow: hidden;
+}
+.main form input {
+  flex: 1;
+  padding: 20px 25px;
+  border: none;
+  outline: none;
+  font-size: 1.1rem;
+  color: #000;
+  letter-spacing: 1px;
+}
+
+.main input::placeholder {
+  color: #75797c;
+}
+
+.main form button {
+  padding: 10px;
+  outline: none;
+  border: none;
+  border-left: 1px solid #000;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 200ms;
+  transition-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.main form button:active {
+  transform: translateX(5px);
+}
+
+.main_board_container {
+  margin: 25px auto;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(6px);
+  box-shadow: 2px 3px 12px rgba(0, 0, 0, 0.3);
+  width: 60%;
+  overflow: hidden;
+}
+.main_board {
+  padding: 10px;
+  padding-top: 3px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.main_board .board_left {
+  text-align: center;
+}
+
+.main_board .board_icon {
+  font-size: 3rem;
+  color: #fff;
+}
+
+.main_board .board_right {
+  flex: 10;
+  padding-left: 15px;
+  width: 100%;
+}
+
+.board_right .board_right_item {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 600px) {
+  .main form {
+    width: 85%;
+  }
+
+  .main_heading {
+    font-size: 30px;
+  }
+
+  .main_board_container {
+    width: 95%;
+  }
+
+  .main_board {
+    flex-direction: column;
+  }
+}

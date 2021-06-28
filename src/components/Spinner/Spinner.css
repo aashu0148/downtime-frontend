@@ -1,0 +1,44 @@
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 50px;
+  min-height: 50px;
+  margin: auto 0;
+}
+.pulse-spinner {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  background: linear-gradient(
+    65deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+}
+.pulse-spinner::after {
+  content: "";
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  background: linear-gradient(
+    65deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  z-index: 1;
+  position: absolute;
+  animation: pulse 1s ease infinite;
+}
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
