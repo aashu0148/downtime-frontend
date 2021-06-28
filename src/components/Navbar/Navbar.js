@@ -13,23 +13,17 @@ function Navbar(props) {
       <Link to="/" style={{ textDecoration: "none" }}>
         <h1 className="title">DownTime</h1>
       </Link>
-      {props.auth ? (
-        history.location.pathname.includes("dashboard") ? (
-          <Link
-            onClick={props.logoutAction}
-            to="/"
-            style={{ textDecoration: "none" }}
-          >
-            <p>Logout</p>
-          </Link>
-        ) : (
-          <Link to="dashboard" style={{ textDecoration: "none" }}>
-            <p>Dashboard</p>
-          </Link>
-        )
+      {history.location.pathname.includes("dashboard") ? (
+        <Link
+          onClick={props.logoutAction}
+          to="/"
+          style={{ textDecoration: "none" }}
+        >
+          <p>Logout</p>
+        </Link>
       ) : (
-        <Link to="login" style={{ textDecoration: "none" }}>
-          <p>Login</p>
+        <Link to="dashboard" style={{ textDecoration: "none" }}>
+          <p>Dashboard</p>
         </Link>
       )}
     </div>

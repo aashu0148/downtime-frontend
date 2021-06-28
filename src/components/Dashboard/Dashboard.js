@@ -4,9 +4,14 @@ import { Redirect } from "react-router-dom";
 
 import Navbar from "../Navbar/Navbar";
 import Spinner from "../Spinner/Spinner";
+import Strip from "./Strip/Strip";
 import "./Dashboard.css";
 
 function Dashboard(props) {
+  const addWebsiteHandler = (e) => {
+    e.preventDefault();
+  };
+
   return props.preloading ? (
     <div
       style={{
@@ -29,7 +34,39 @@ function Dashboard(props) {
         ></path>
       </svg>
       <Navbar />
-      <h1>Dashboard</h1>
+
+      <div className="dashboard_body">
+        <h1 style={{ marginBottom: "10px" }}>Your Websites</h1>
+        <Strip
+          name="Google"
+          url="https://google.com"
+          responseTime="1.1sec"
+          statusCode="200"
+        />
+        <Strip
+          name="chatapp-b2a26.web.app/"
+          url="https://fb.com"
+          statusCode="201"
+          responseTime="12sec"
+        />
+        <br />
+        <hr />
+        <br />
+        <h3>Add Website</h3>
+        <form onSubmit={addWebsiteHandler}>
+          <div className="field-form-elem">
+            <label>URL</label>
+            <input type="text" placeholder="Enter URL" />
+          </div>
+          <div className="field-form-elem">
+            <label>Email to send notification</label>
+            <input type="email" placeholder="Enter email" />
+          </div>
+          <button className="button" type="submit">
+            Add
+          </button>
+        </form>
+      </div>
     </div>
   ) : (
     <Redirect to="/login" />
