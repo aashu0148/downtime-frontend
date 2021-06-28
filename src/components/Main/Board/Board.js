@@ -12,7 +12,7 @@ function Board(props) {
           rel="noreferrer"
           style={{ color: props.down ? "red" : "var(--secondary-color)" }}
         >
-          {props.name?.substr(0, 32)}{" "}
+          {props.name ? props.name.substr(0, 32) : ""}{" "}
         </a>
         status check
       </h2>

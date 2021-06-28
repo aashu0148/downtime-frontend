@@ -43,7 +43,7 @@ function Strip(props) {
             rel="noreferrer"
             style={{ color: props.down ? "red" : "var(--secondary-color)" }}
           >
-            {props.name?.substr(0, 22)}
+            {props.name ? props.name.substr(0, 22) : ""}
           </a>
         </p>
       </Grid>
