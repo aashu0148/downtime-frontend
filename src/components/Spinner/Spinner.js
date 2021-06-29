@@ -2,10 +2,12 @@ import React from "react";
 
 import "./Spinner.css";
 
-function Spinner() {
+function Spinner(props) {
   return (
-    <div className="spinner">
-      <div className="pulse-spinner"></div>
+    <div className={`spinner ${props.small ? "spinner-small" : ""}`}>
+      <div
+        className={`pulse-spinner ${props.small ? "spinner-small" : ""}`}
+      ></div>
     </div>
   );
 }

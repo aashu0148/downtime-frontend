@@ -43,7 +43,7 @@ function App(props) {
             props.loginAction(data.data);
             setTimeout(() => {
               props.loadedAction();
-            }, 300);
+            }, 500);
           })
           .catch(() => {
             props.loadedAction();

@@ -1,10 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/DoneOutline";
 import DownIcon from "@material-ui/icons/DesktopAccessDisabled";
 import DeleteIcon from "@material-ui/icons/Delete";
 
+import Spinner from "../../Spinner/Spinner";
+
 function Strip(props) {
+  const [deleting, setDeleting] = useState(false);
+
+  const deleteHandler = () => {
+    setDeleting(true);
+    fetch(`${process.env.REACT_APP_SERVER}/dashboard/remove`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        uid: props.uid,
+        url: props.url,
+      }),
+    })
+      .then(async (res) => {
+        setDeleting(false);
+        const data = await res.json();
+        if (!data.status) {
+          return;
+        }
+        props.onDelete();
+      })
+      .catch(() => {
+        setDeleting(false);
+      });
+  };
+
   return (
     <Grid
       container
@@ -75,7 +104,14 @@ function Strip(props) {
         md={1}
         lg={1}
       >
-        <DeleteIcon style={{ color: "red", cursor: "pointer" }} />
+        {deleting ? (
+          <Spinner small />
+        ) : (
+          <DeleteIcon
+            onClick={deleteHandler}
+            style={{ color: "red", cursor: "pointer" }}
+          />
+        )}
       </Grid>
     </Grid>
   );

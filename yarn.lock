@@ -4593,6 +4593,13 @@
     "snapdragon" "^0.8.1"
     "to-regex" "^3.0.1"
 
+"extract-domain@^2.3.3":
+  "integrity" "sha512-xPMOPdDOikqBrY8mFuwfGfTOxdZz8mLg2wne4zVEpMi9B1SDK7FHao+KiYFj8PothdRf3rxId8pIdQ2m6xft8g=="
+  "resolved" "https://registry.npmjs.org/extract-domain/-/extract-domain-2.3.3.tgz"
+  "version" "2.3.3"
+  optionalDependencies:
+    "psl" "^1.8.0"
+
 "extsprintf@^1.2.0", "extsprintf@1.3.0":
   "integrity" "sha1-lpGEQOMEGnpBT4xS48V06zw+HgU="
   "resolved" "https://registry.npmjs.org/extsprintf/-/extsprintf-1.3.0.tgz"
@@ -8927,7 +8934,7 @@
   "resolved" "https://registry.npmjs.org/prr/-/prr-1.0.1.tgz"
   "version" "1.0.1"
 
-"psl@^1.1.28":
+"psl@^1.1.28", "psl@^1.8.0":
   "integrity" "sha512-RIdOzyoavK+hA18OGGWDqUTsCLhtA7IcZ/6NCs4fFJaHBDab+pDDmDIByWFRQJq2Cd7r1OoQxBGKOaztq+hjIQ=="
   "resolved" "https://registry.npmjs.org/psl/-/psl-1.8.0.tgz"
   "version" "1.8.0"

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import extractDomain from "extract-domain";
 
 import Navbar from "../Navbar/Navbar";
 import Spinner from "../Spinner/Spinner";
@@ -8,9 +9,116 @@ import Strip from "./Strip/Strip";
 import "./Dashboard.css";
 
 function Dashboard(props) {
+  const inputUrl = useRef();
+
+  const [errorMsg, setErrorMsg] = useState("");
+  const [addWebsiteErrorMsg, setAddWebsiteErrorMsg] = useState("");
+  const [addButtonDisabled, setAddButtonDisabled] = useState(false);
+  const [websites, setWebsites] = useState(<Spinner />);
+
+  function validateUrl(value) {
+    return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(
+      value
+    );
+  }
+
+  const deleteStrip = (data, index) => {
+    const myData = [...data];
+    myData.splice(index, 1);
+
+    const result = myData.map((item, i) => (
+      <Strip
+        key={i + item.url}
+        down={item.down}
+        uid={props.uid}
+        name={extractDomain(item.url)}
+        url={item.url}
+        responseTime={`${item.responseTime / 1000} sec`}
+        statusCode={item.statusCode}
+        onDelete={() => {
+          deleteStrip(myData, i);
+        }}
+      />
+    ));
+
+    setWebsites(result);
+  };
+
   const addWebsiteHandler = (e) => {
     e.preventDefault();
+
+    const value = inputUrl.current.value;
+    if (!value) return;
+
+    if (!validateUrl(value)) {
+      setAddWebsiteErrorMsg(
+        "Invalid URL, valid URL example - https://abc@xyz.com or http://adc@xyz.com"
+      );
+      return;
+    }
+
+    setAddWebsiteErrorMsg("");
+    setAddButtonDisabled(true);
+
+    fetch(`${process.env.REACT_APP_SERVER}/dashboard/add`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        uid: props.uid,
+        url: inputUrl.current.value,
+      }),
+    })
+      .then(async (res) => {
+        setAddButtonDisabled(false);
+        const data = await res.json();
+        if (!data.status) {
+          setAddWebsiteErrorMsg(data.message);
+          return;
+        }
+        e.target.reset();
+        window.location.href = "/dashboard";
+      })
+      .catch(() => {
+        setAddButtonDisabled(false);
+        setAddWebsiteErrorMsg("Error connecting to server");
+      });
   };
+
+  useEffect(() => {
+    if (!props.uid) return;
+    fetch(`${process.env.REACT_APP_SERVER}/dashboard/get-url/${props.uid}`)
+      .then(async (res) => {
+        const data = await res.json();
+        if (!data.status) {
+          setErrorMsg(data.message);
+          setWebsites([]);
+          return;
+        }
+
+        const result = data.data.map((item, i) => (
+          <Strip
+            key={i}
+            down={item.down}
+            uid={props.uid}
+            name={extractDomain(item.url)}
+            url={item.url}
+            responseTime={`${item.responseTime / 1000} sec`}
+            statusCode={item.statusCode}
+            onDelete={() => {
+              deleteStrip(data.data, i);
+            }}
+          />
+        ));
+
+        setWebsites(result);
+      })
+      .catch(() => {
+        setErrorMsg("Error connecting to server");
+        setWebsites([]);
+      });
+  }, [props.uid]);
 
   return props.preloading ? (
     <div
@@ -37,33 +145,35 @@ function Dashboard(props) {
 
       <div className="dashboard_body">
         <h1 style={{ marginBottom: "10px" }}>Your Websites</h1>
-        <Strip
-          name="Google"
-          url="https://google.com"
-          responseTime="1.1sec"
-          statusCode="200"
-        />
-        <Strip
-          name="chatapp-b2a26.web.app/"
-          url="https://fb.com"
-          statusCode="201"
-          responseTime="12sec"
-        />
+        <p>{errorMsg}</p>
+        {websites}
+
         <br />
         <hr />
         <br />
-        <h3>Add Website</h3>
+        <h2>
+          Add Website -{" "}
+          <span style={{ fontSize: "var(--font-medium)" }}>
+            If any of your website go down we will notify you on your registered
+            email.
+          </span>
+        </h2>
         <form onSubmit={addWebsiteHandler}>
           <div className="field-form-elem">
             <label>URL</label>
-            <input type="text" placeholder="Enter URL" />
+            <input ref={inputUrl} type="text" placeholder="Enter URL" />
           </div>
           {/* <div className="field-form-elem">
             <label>Email to send notification</label>
             <input type="email" placeholder="Enter email" />
           </div> */}
-          <button className="button" type="submit">
-            Add
+          <p className="field-error-msg">{addWebsiteErrorMsg}</p>
+          <button
+            disabled={addButtonDisabled}
+            className={`button ${addButtonDisabled ? "button-disabled" : ""}`}
+            type="submit"
+          >
+            {addButtonDisabled ? "Loading..." : "Add"}
           </button>
         </form>
       </div>
@@ -76,6 +186,7 @@ function Dashboard(props) {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
+    uid: state.id,
     preloading: state.preloading,
   };
 };
