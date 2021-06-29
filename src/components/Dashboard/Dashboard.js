@@ -58,10 +58,10 @@ function Dashboard(props) {
             <label>URL</label>
             <input type="text" placeholder="Enter URL" />
           </div>
-          <div className="field-form-elem">
+          {/* <div className="field-form-elem">
             <label>Email to send notification</label>
             <input type="email" placeholder="Enter email" />
-          </div>
+          </div> */}
           <button className="button" type="submit">
             Add
           </button>

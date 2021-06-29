@@ -9,7 +9,7 @@ function Board(props) {
         <a
           href={props.url}
           target="_blank"
-          rel="noreferrer"
+          rel="noreferrer noopener"
           style={{ color: props.down ? "red" : "var(--secondary-color)" }}
         >
           {props.name ? props.name.substr(0, 32) : ""}{" "}
